@@ -70,7 +70,10 @@ const getAndFormatInstructions = (arr: string[]): Instructions => {
 }
 
 const processInstructions = (stacks: Stacks, instructions: Instructions): Stacks => {
+  let finalStacks: Stacks = []
   // now do the shit
+
+  return finalStacks
 }
 
 const contents = await readContents()
