@@ -1,13 +1,16 @@
 import { readFile } from 'node:fs/promises';
-let contents = '';
-try {
-    const filePath = new URL('./input.txt', import.meta.url);
-    contents = await readFile(filePath, { encoding: 'utf8' });
-}
-catch (err) {
-    if (err instanceof Error)
-        console.log(err.message);
-}
+const readContents = async () => {
+    let data = '';
+    try {
+        const filePath = new URL('./input.txt', import.meta.url);
+        data = await readFile(filePath, { encoding: 'utf8' });
+    }
+    catch (err) {
+        if (err instanceof Error)
+            console.log(err.message);
+    }
+    return data;
+};
 /*
   Key:
   Rock = A or X (1 pt)
@@ -16,6 +19,7 @@ catch (err) {
 
   (0 if you lost, 3 if the round was a draw, and 6 if you won).
 */
+const contents = await readContents();
 let arr = contents.split('\n');
 let groupedArr = arr.map(rpsRes => {
     return rpsRes.split(' ');

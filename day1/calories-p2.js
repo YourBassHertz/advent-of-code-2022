@@ -1,13 +1,17 @@
 import { readFile } from 'node:fs/promises';
-let contents = '';
-try {
-    const filePath = new URL('./input.txt', import.meta.url);
-    contents = await readFile(filePath, { encoding: 'utf8' });
-}
-catch (err) {
-    if (err instanceof Error)
-        console.log(err.message);
-}
+const readContents = async () => {
+    let data = '';
+    try {
+        const filePath = new URL('./input.txt', import.meta.url);
+        data = await readFile(filePath, { encoding: 'utf8' });
+    }
+    catch (err) {
+        if (err instanceof Error)
+            console.log(err.message);
+    }
+    return data;
+};
+const contents = await readContents();
 let arr = contents.split('\n');
 let counter = 0;
 let tmpTotal = 0;
@@ -31,4 +35,4 @@ for (let index = 0; index < 3; index++) {
     const topElf = sortedElves[key];
     first3Totals += topElf;
 }
-console.log(sortedElves);
+console.log(first3Totals);

@@ -1,13 +1,16 @@
 import { readFile } from 'node:fs/promises';
-let contents = '';
-try {
-    const filePath = new URL('./input.txt', import.meta.url);
-    contents = await readFile(filePath, { encoding: 'utf8' });
-}
-catch (err) {
-    if (err instanceof Error)
-        console.log(err.message);
-}
+const readContents = async () => {
+    let data = '';
+    try {
+        const filePath = new URL('./input.txt', import.meta.url);
+        data = await readFile(filePath, { encoding: 'utf8' });
+    }
+    catch (err) {
+        if (err instanceof Error)
+            console.log(err.message);
+    }
+    return data;
+};
 // consts for rucksack
 const priorities = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
     'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
@@ -17,6 +20,7 @@ const badgeFinder = (array1, array2, array3) => {
     const eq2 = array3.filter(o => eq1.find(o2 => o === o2))[0];
     return eq2;
 };
+const contents = await readContents();
 let arr = contents.split('\n');
 let priorityScore = 0;
 for (let index = 0; index < arr.length; index += 3) {

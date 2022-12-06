@@ -14,8 +14,6 @@ const stackDepth = 7
 
 
 // Methods
-
-
 const readContents = async (): Promise<string> => {
   let data = ''
   try {

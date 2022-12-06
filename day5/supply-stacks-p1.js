@@ -1,5 +1,7 @@
 import { readFile } from 'node:fs/promises';
+// Constants
 const stackDepth = 7;
+// Methods
 const readContents = async () => {
     let data = '';
     try {
@@ -41,12 +43,17 @@ const getAndFormatInstructions = (arr) => {
             to: Number(insArr[2])
         });
     });
-    console.log(instructionsRaw);
     return formattedInstructions;
+};
+const processInstructions = (stacks, instructions) => {
+    let finalStacks = [];
+    // now do the shit
+    return finalStacks;
 };
 const contents = await readContents();
 let arr = contents.split('\n');
 const stacks = getAndFormatStacks(arr);
 const instructions = getAndFormatInstructions(arr);
+const finalStack = processInstructions(stacks, instructions);
 console.log(instructions);
 console.log(stacks);

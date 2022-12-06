@@ -1,11 +1,14 @@
 import { readFile } from 'node:fs/promises'
-let contents: string = ''
+const readContents = async (): Promise<string> => {
+  let data = ''
+  try {
+    const filePath = new URL('./input.txt', import.meta.url)
+    data = await readFile(filePath, { encoding: 'utf8' })
+  } catch (err) {
+    if (err instanceof Error) console.log(err.message)
+  }
 
-try {
-  const filePath = new URL('./input.txt', import.meta.url)
-  contents = await readFile(filePath, { encoding: 'utf8' })
-} catch (err) {
-  if (err instanceof Error) console.log(err.message)
+  return data
 }
 
 // consts for rucksack
@@ -17,6 +20,7 @@ const equalChar = (array1: string[], array2: string[]): string => {
   return array1.filter(o => array2.find(o2 => o === o2))[0]
 }
 
+const contents = await readContents()
 let arr: string[] = contents.split('\n')
 
 // console.log(arr)

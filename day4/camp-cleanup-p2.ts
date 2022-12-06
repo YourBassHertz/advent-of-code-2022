@@ -1,8 +1,19 @@
 import { readFile } from 'node:fs/promises'
-const filePath = new URL('./input.txt', import.meta.url)
 
 // consts for camp
-let contents: string = ''
+const readContents = async (): Promise<string> => {
+  let data = ''
+  try {
+    const filePath = new URL('./input.txt', import.meta.url)
+    data = await readFile(filePath, { encoding: 'utf8' })
+  } catch (err) {
+    if (err instanceof Error) console.log(err.message)
+  }
+
+  return data
+}
+
+
 let pairsWithOverlap: number = 0
 
 const spreadSection = (elfSection: string): number[] => {
@@ -19,12 +30,8 @@ const hasOverlap = (arr1: number[], arr2: number[]): boolean => {
   return arr1.some(item => arr2.includes(item))
 }
 
-try {
-  contents = await readFile(filePath, { encoding: 'utf8' });
-} catch (err) {
-  err instanceof Error ? console.log(err.message) : console.log(err)
-}
 
+const contents = await readContents()
 let arr: string[] = contents.split('\n')
 
 

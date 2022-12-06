@@ -1,11 +1,15 @@
 import { readFile } from 'node:fs/promises'
-let contents: string = ''
 
-try {
-  const filePath = new URL('./input.txt', import.meta.url)
-  contents = await readFile(filePath, { encoding: 'utf8' })
-} catch (err) {
-  if (err instanceof Error) console.log(err.message)
+const readContents = async (): Promise<string> => {
+  let data = ''
+  try {
+    const filePath = new URL('./input.txt', import.meta.url)
+    data = await readFile(filePath, { encoding: 'utf8' })
+  } catch (err) {
+    if (err instanceof Error) console.log(err.message)
+  }
+
+  return data
 }
   
 
@@ -18,6 +22,7 @@ try {
   (0 if you lost, 3 if the round was a draw, and 6 if you won).
 */
 
+const contents = await readContents()
 let arr: string[] = contents.split('\n')
 let groupedArr = arr.map(rpsRes => {
   return rpsRes.split(' ')
