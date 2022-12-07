@@ -14,7 +14,7 @@ const readContents = async (): Promise<string> => {
 }
 
 
-let pairsWithOverlap: number = 0
+let pairsWithOverlap = 0
 
 const spreadSection = (elfSection: string): number[] => {
   let elfSectionNumbers: string[] = elfSection.split('-')
