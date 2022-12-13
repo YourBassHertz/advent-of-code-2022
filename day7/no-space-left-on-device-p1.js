@@ -14,7 +14,7 @@ const readContents = async () => {
     }
     return data;
 };
-// Methods
+// Methodsss
 const writeContents = async (fileSystem) => {
     const outputFilePath = new URL('./output.json', import.meta.url);
     writeFile(outputFilePath, fileSystem, 'utf8');
@@ -65,7 +65,7 @@ const lsAction = (fileSystem, startingIndex, commandsArr, currentDirPath) => {
         console.log('currentCommand: ', currentCommand);
         if (currentCommandArr[0] !== '$') {
             console.log('currentDirPath before update: ', currentDirPath);
-            updateDir(fileSystem, currentDirPath[currentDirPath.length - 1], currentCommandArr);
+            updateDir(fileSystem, currentDirPath, currentCommandArr, undefined);
         }
         else {
             break;
@@ -91,18 +91,22 @@ const setCurrentDir = (currentDirPath, cdInput) => {
 const isNum = (v) => {
     return /\d/.test(v);
 };
-const updateDir = (node, needle, currentCommandArr) => {
+// TODO: this is where I left off. what's happening is some directories have the same name, so it's not getting to the real directory that's further down the list
+// TODO: need to see if there's a way to compare the parent directory name to the path in the currentDirPath
+const updateDir = (node, currentDirPath, currentCommandArr, parentDir) => {
+    const needle = currentDirPath[currentDirPath.length - 1];
+    const actualParentDir = currentDirPath[currentDirPath.length - 2];
     Object.keys(node).some(k => {
         if (currentCommandArr[1] === 'fgnljzg.zvv') {
             console.log('currentCommandArr', currentCommandArr);
             console.log('Number(currentCommandArr[0])', Number(currentCommandArr));
         }
         // find current directory
-        if (k === needle) {
+        if (k === needle && parentDir === actualParentDir) {
             currentCommandArr[0] === 'dir' ? (node[k][currentCommandArr[1]] = {} || 1) : node[k][currentCommandArr[1]] = Number(currentCommandArr[0]);
         }
         else if (typeof node === 'object') {
-            updateDir(node[k], needle, currentCommandArr);
+            updateDir(node[k], currentDirPath, currentCommandArr, k);
         }
     });
 };

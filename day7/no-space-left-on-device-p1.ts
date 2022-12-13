@@ -65,15 +65,6 @@ const identifyFileSystem = (rawCommads: string): FileSystem => {
   return fileSystem
 }
 
-const cdInAction = (fileSystem: FileSystem, cdInput: string): FileSystem => {
-  if (cdInput !== '..') {
-    fileSystem[cdInput] = {}
-  }
-
-  // console.log('updated fileSystem', fileSystem)
-  return fileSystem
-}
-
 const lsAction = (
   fileSystem: FileSystem, 
   startingIndex: number, 
@@ -88,16 +79,10 @@ const lsAction = (
     console.log('currentCommand: ', currentCommand)
     if (currentCommandArr[0] !== '$') {
       console.log('currentDirPath before update: ', currentDirPath)
-      updateDir(fileSystem, currentDirPath[currentDirPath.length - 1], currentCommandArr)
+      updateDir(fileSystem, currentDirPath, currentCommandArr, undefined)
     } else {
       break
     }
-      // break
-      // fileSystem[currentCommandArr[1]] = Number(currentCommandArr[0])
-    // } else if (currentCommandArr[0] === 'dir') {
-    //   updateDir(fileSystem, currentDirPath[currentDirPath.length - 1], Number(currentCommandArr[0]))
-    //   fileSystem[currentCommandArr[1]] = {}
-    // }
     
   }
 
@@ -117,14 +102,14 @@ const isNum = (v: string): boolean => {
   return /\d/.test(v);
 }
 
-
-// TODO: this is where I left off. what's happening is some directories have the same name, so it's not getting to the real directory that's further down the list
-// TODO: need to see if there's a way to compare the parent directory name to the path in the currentDirPath
 const updateDir = (
   node: Record<string,any>,
-  needle: string,
-  currentCommandArr: string[]
+  currentDirPath: string[],
+  currentCommandArr: string[],
+  parentDir: string | undefined
 ) => {
+  const needle = currentDirPath[currentDirPath.length - 1]
+  const actualParentDir = currentDirPath[currentDirPath.length - 2]
   Object.keys(node).some(k => {
 
     if (currentCommandArr[1] === 'fgnljzg.zvv') {
@@ -132,11 +117,38 @@ const updateDir = (
       console.log('Number(currentCommandArr[0])', Number(currentCommandArr))
     }
     // find current directory
-    if (k === needle) {
+    if (k === needle && parentDir === actualParentDir) {
 
       currentCommandArr[0] === 'dir' ? (node[k][currentCommandArr[1]] = {} || 1) : node[k][currentCommandArr[1]] = Number(currentCommandArr[0])
     } else if (typeof node === 'object') {
-      updateDir(node[k], needle, currentCommandArr)
+      updateDir(node[k], currentDirPath, currentCommandArr, k)
+    }
+  })  
+}
+
+// TODO: need to create a similar command to 'updateDir' that loops through each node and finds the ones that aren't 
+// TODO: tentative logic: if current dir has no other dirs in it, add the files, then go back up (might just do 
+// TODO: nested loops here, but that'd be hard if we don't know how deep they go)
+const sumDirsAndFindCertainOnes = (
+  node: Record<string,any>,
+  currentDirPath: string[],
+  currentCommandArr: string[],
+  parentDir: string | undefined
+) => {
+  const needle = currentDirPath[currentDirPath.length - 1]
+  const actualParentDir = currentDirPath[currentDirPath.length - 2]
+  Object.keys(node).some(k => {
+
+    if (currentCommandArr[1] === 'fgnljzg.zvv') {
+      console.log('currentCommandArr', currentCommandArr)
+      console.log('Number(currentCommandArr[0])', Number(currentCommandArr))
+    }
+    // find current directory
+    if (k === needle && parentDir === actualParentDir) {
+
+      currentCommandArr[0] === 'dir' ? (node[k][currentCommandArr[1]] = {} || 1) : node[k][currentCommandArr[1]] = Number(currentCommandArr[0])
+    } else if (typeof node === 'object') {
+      updateDir(node[k], currentDirPath, currentCommandArr, k)
     }
   })  
 }
@@ -144,6 +156,8 @@ const updateDir = (
 // Start the process
 const contents = await readContents()
 const fileSystem = identifyFileSystem(contents)
+
+// TODO: need to create a similar command to 'updateDir' that loops through each node and finds the ones that aren't 
 
 // console.log(fileSystem)
 writeContents(JSON.stringify(fileSystem))
