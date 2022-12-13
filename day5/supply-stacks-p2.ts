@@ -79,7 +79,6 @@ const getTheMoveStack = (instruction: Instruction): string[] => {
     // Check if the row is empty and the number of boxes grabbed does not exceed the amount to move
     if (row[from] !== ' ' && numberOfBoxesGrabbed < instruction.move) {
       moveStack.push(row[from])
-
       stacks[downTheStacks][from] = ' '
       numberOfBoxesGrabbed++
     } else {
@@ -94,6 +93,7 @@ const getTheMoveStack = (instruction: Instruction): string[] => {
 const moveTheStack = (moveStack: string[], stacks: Stacks, instruction: Instruction): Stacks => {
   let howFarDownCount = 0;
   const to = instruction.to - 1
+  const reversedMoveStack = moveStack.reverse()
 
   // identify when to start adding the box
   for (let downTheStacks = 0; downTheStacks < stacks.length; downTheStacks++) {
@@ -106,7 +106,7 @@ const moveTheStack = (moveStack: string[], stacks: Stacks, instruction: Instruct
     }
   }
 
-  for (let count = 0; count < moveStack.length; count++) {
+  for (let count = 0; count < reversedMoveStack.length; count++) {
     // find the row above the row with a box in it and updated it
     if (stacks[howFarDownCount - 1] === undefined) {
       const newRow = [];
@@ -114,14 +114,14 @@ const moveTheStack = (moveStack: string[], stacks: Stacks, instruction: Instruct
       // Create a new row to add to the stacks
       for (let index = 0; index <= stackWidth; index++) {
         if (index === to) {
-          newRow.push(moveStack[count])
+          newRow.push(reversedMoveStack[count])
         } else {
           newRow.push(' ')
         }
       }
       stacks.unshift(newRow)
     } else {
-      stacks[howFarDownCount - 1][to] = moveStack[count]
+      stacks[howFarDownCount - 1][to] = reversedMoveStack[count]
     }
     howFarDownCount--
   }

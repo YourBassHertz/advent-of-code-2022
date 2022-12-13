@@ -69,6 +69,7 @@ const getTheMoveStack = (instruction) => {
 const moveTheStack = (moveStack, stacks, instruction) => {
     let howFarDownCount = 0;
     const to = instruction.to - 1;
+    const reversedMoveStack = moveStack.reverse();
     // identify when to start adding the box
     for (let downTheStacks = 0; downTheStacks < stacks.length; downTheStacks++) {
         const colVal = stacks[downTheStacks][to];
@@ -79,14 +80,14 @@ const moveTheStack = (moveStack, stacks, instruction) => {
             break;
         }
     }
-    for (let count = 0; count < moveStack.length; count++) {
+    for (let count = 0; count < reversedMoveStack.length; count++) {
         // find the row above the row with a box in it and updated it
         if (stacks[howFarDownCount - 1] === undefined) {
             const newRow = [];
             // Create a new row to add to the stacks
             for (let index = 0; index <= stackWidth; index++) {
                 if (index === to) {
-                    newRow.push(moveStack[count]);
+                    newRow.push(reversedMoveStack[count]);
                 }
                 else {
                     newRow.push(' ');
@@ -95,7 +96,7 @@ const moveTheStack = (moveStack, stacks, instruction) => {
             stacks.unshift(newRow);
         }
         else {
-            stacks[howFarDownCount - 1][to] = moveStack[count];
+            stacks[howFarDownCount - 1][to] = reversedMoveStack[count];
         }
         howFarDownCount--;
     }
