@@ -22,7 +22,7 @@ const readContents = async (): Promise<string> => {
   return data
 }
 
-// Methods
+// Methodsss
 const writeContents = async (fileSystem: string) => {
   const outputFilePath = new URL('./output.json', import.meta.url)
   writeFile(outputFilePath, fileSystem, 'utf8');
